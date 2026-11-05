@@ -13,12 +13,13 @@ impl TransportChoice {
 }
 impl std::fmt::Display for TransportChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self {
+        let label = match self {
             Self::Udp => "UDP（明文）",
             Self::Tcp => "TCP（明文）",
             Self::Dot => "DoT",
             Self::Doh => "DoH",
-        })
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 

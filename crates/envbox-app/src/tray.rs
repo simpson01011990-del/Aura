@@ -85,8 +85,8 @@ impl TrayState {
         let icon = tray_icon::Icon::from_rgba(image.into_raw(), width, height)
             .map_err(|err| err.to_string())?;
         let menu = Menu::new();
-        let restore = MenuItem::new("打开 Aura", true, None);
-        let exit = MenuItem::new("退出 Aura", true, None);
+        let restore = MenuItem::new(crate::i18n::tr("打开 Aura"), true, None);
+        let exit = MenuItem::new(crate::i18n::tr("退出 Aura"), true, None);
         menu.append(&restore).map_err(|err| err.to_string())?;
         menu.append(&exit).map_err(|err| err.to_string())?;
         let restore_id = restore.id().clone();

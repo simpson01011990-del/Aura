@@ -13,11 +13,12 @@ impl ProxyChoice {
 }
 impl std::fmt::Display for ProxyChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self {
+        let label = match self {
             Self::None => "无 Profile 代理",
             Self::Http => "HTTP",
             Self::Socks5 => "SOCKS5",
-        })
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 #[derive(Debug, Clone, Default, PartialEq, Eq)]

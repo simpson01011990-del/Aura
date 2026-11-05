@@ -1,6 +1,5 @@
-use iced::widget::{
-    button, checkbox, column, container, pick_list, row, text, text_input, tooltip, Space,
-};
+use iced::widget::{button, checkbox, column, container, pick_list, row, tooltip, Space};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Element, Fill, Padding};
 
 use crate::app::dns_editor::{DnsEditor, TransportChoice};
@@ -52,7 +51,7 @@ pub(super) fn view(editor: &DnsEditor, mode: envbox_core::DnsMode) -> Element<'_
         ]
         .spacing(8)
         .align_y(Alignment::Center),
-        checkbox("禁止回退宿主 DNS（严格模式）", editor.strict)
+        checkbox(crate::i18n::tr("禁止回退宿主 DNS（严格模式）"), editor.strict)
             .on_toggle(Message::ProfileDnsStrict)
             .text_size(TEXT_BODY)
             .font(font::ui_font())

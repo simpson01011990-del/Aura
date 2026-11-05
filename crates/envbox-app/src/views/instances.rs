@@ -1,6 +1,7 @@
 //! Full-page instances list.
 
-use iced::widget::{button, column, container, row, scrollable, text};
+use iced::widget::{button, column, container, row, scrollable};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::{status_label, EnvBoxApp};

@@ -3,7 +3,8 @@ use crate::font;
 use crate::message::Message;
 use crate::theme::{self, DANGER_TEXT, INK, INK_2, MUTED, SUCCESS_TEXT};
 use crate::theme::{TEXT_BODY, TEXT_CAPTION, TEXT_SECTION};
-use iced::widget::{button, column, container, row, text, tooltip};
+use iced::widget::{button, column, container, row, tooltip};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Padding};
 
 // Legacy route renders management only; startup belongs to the Applications page.

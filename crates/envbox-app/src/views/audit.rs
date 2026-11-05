@@ -1,6 +1,7 @@
 //! Full-page audit log.
 
-use iced::widget::{button, column, container, pick_list, row, scrollable, text};
+use iced::widget::{button, column, container, pick_list, row, scrollable};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;
@@ -30,10 +31,12 @@ pub fn view_full(app: &EnvBoxApp) -> Element<'_, Message> {
     let rows_all = app.filtered_audit_events();
     let shown = rows_all.len();
     let total = app.audit_total;
-    let mut soft_opts = vec!["全部软件".to_string()];
+    // The "all" entry is display text; it maps back to an empty filter below.
+    let all_software = crate::i18n::tr("全部软件").into_owned();
+    let mut soft_opts = vec![all_software.clone()];
     soft_opts.extend(app.audit_software_options());
     let filter_sel = if app.audit_filter.trim().is_empty() {
-        "全部软件".to_string()
+        all_software.clone()
     } else {
         app.audit_filter.clone()
     };
@@ -56,8 +59,8 @@ pub fn view_full(app: &EnvBoxApp) -> Element<'_, Message> {
         .spacing(4)
         .width(Fill),
         row![
-            pick_list(soft_opts, Some(filter_sel), |s: String| {
-                Message::AuditFilter(if s == "全部软件" {
+            pick_list(soft_opts, Some(filter_sel), move |s: String| {
+                Message::AuditFilter(if s == all_software {
                     String::new()
                 } else {
                     s

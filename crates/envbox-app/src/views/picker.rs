@@ -1,8 +1,7 @@
 //! Local installed-app picker overlay (search + icons + capability badges).
 
-use iced::widget::{
-    button, column, container, image, mouse_area, row, scrollable, text, text_input, Space,
-};
+use iced::widget::{button, column, container, image, mouse_area, row, scrollable, Space};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

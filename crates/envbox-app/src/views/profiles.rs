@@ -1,6 +1,7 @@
 //! Profiles center list.
 
-use iced::widget::{button, column, row, scrollable, text};
+use iced::widget::{button, column, row, scrollable};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Padding};
 
 use crate::app::EnvBoxApp;

@@ -12,6 +12,7 @@ mod combo_overlay;
 mod discover;
 mod discover_commands;
 mod font;
+mod i18n;
 mod icons;
 mod message;
 mod options;
@@ -31,6 +32,7 @@ mod widgets;
 use iced::{Size, Theme};
 
 fn main() -> iced::Result {
+    i18n::init(&envbox_storage::ConfigStore::default_root());
     if let Some(result) = app_launch::handle_startup() {
         if let Err(error) = result {
             show_startup_error(&error);
@@ -76,7 +78,8 @@ fn show_startup_error(error: &str) {
     use windows::core::{w, PCWSTR};
     use windows::Win32::UI::WindowsAndMessaging::{MessageBoxW, MB_ICONERROR, MB_OK};
 
-    let text: Vec<u16> = format!("Aura 无法启动：{error}")
+    let message = format!("Aura 无法启动：{error}");
+    let text: Vec<u16> = i18n::tr(&message)
         .encode_utf16()
         .chain(std::iter::once(0))
         .collect();

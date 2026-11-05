@@ -1,6 +1,7 @@
 //! Shared UI primitives. No domain logic.
 
-use iced::widget::{button, column, container, row, text};
+use iced::widget::{button, column, container, row};
+use crate::i18n::text;
 use iced::{Alignment, Border, Color, Element, Fill, Length, Padding};
 
 use crate::font;
@@ -63,7 +64,8 @@ pub fn searchable_select(
     use crate::icons::Icon;
     use crate::message::ComboField;
     use crate::options::{option_label, OptionKind};
-    use iced::widget::{scrollable, text_input};
+    use iced::widget::scrollable;
+    use crate::i18n::text_input;
 
     let kind = match field {
         ComboField::Region => OptionKind::Region,

@@ -7,7 +7,8 @@
 mod app;
 mod profile;
 
-use iced::widget::{column, container, scrollable, text};
+use iced::widget::{column, container, scrollable};
+use crate::i18n::text;
 use iced::{Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

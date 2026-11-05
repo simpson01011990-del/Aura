@@ -2,7 +2,8 @@
 
 use std::sync::OnceLock;
 
-use iced::widget::{button, column, container, image, row, text};
+use iced::widget::{button, column, container, image, row};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

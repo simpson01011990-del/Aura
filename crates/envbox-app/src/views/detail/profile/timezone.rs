@@ -5,7 +5,8 @@ use crate::font;
 use crate::message::Message;
 use crate::theme::*;
 use crate::widgets::{form_field, form_section, kv_row, primary_btn, secondary_btn};
-use iced::widget::{button, column, pick_list, row, text, text_input};
+use iced::widget::{button, column, pick_list, row};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Element, Fill, Padding};
 
 pub(super) fn view(app: &EnvBoxApp) -> Element<'_, Message> {

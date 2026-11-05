@@ -1,4 +1,5 @@
-use iced::widget::{button, column, container, pick_list, row, text, text_input, tooltip};
+use iced::widget::{button, column, container, pick_list, row, tooltip};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Element, Fill, Padding};
 
 use crate::app::EnvBoxApp;

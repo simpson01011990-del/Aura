@@ -1,4 +1,5 @@
-use iced::widget::{button, column, container, pick_list, row, text, text_input};
+use iced::widget::{button, column, container, pick_list, row};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;
@@ -181,7 +182,7 @@ struct RunChoice {
 
 impl std::fmt::Display for RunChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.label)
+        f.write_str(&crate::i18n::tr(&self.label))
     }
 }
 
@@ -220,7 +221,7 @@ fn run_selector<'a>(
     pick_list(choices, None::<RunChoice>, move |choice| {
         Message::AppRunWithId(id, choice.profile_id)
     })
-    .placeholder("其他方式")
+    .placeholder(crate::i18n::tr("其他方式"))
     .style(pick_style)
     .menu_style(pick_menu)
     .padding(Padding::from([5, 8]))
@@ -335,7 +336,7 @@ fn app_overview<'a>(
             pick_list(choices, None::<DetectionChoice>, move |choice| {
                 Message::AppDetect(id, choice.profile_id, choice.site)
             })
-            .placeholder("选择环境并打开检测页")
+            .placeholder(crate::i18n::tr("选择环境并打开检测页"))
             .style(pick_style)
             .menu_style(pick_menu)
             .padding(Padding::from([7, 8]))
@@ -367,7 +368,7 @@ struct DetectionChoice {
 }
 impl std::fmt::Display for DetectionChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(&self.label)
+        f.write_str(&crate::i18n::tr(&self.label))
     }
 }
 
@@ -376,7 +377,7 @@ struct LaunchKindChoice(LaunchKind);
 
 impl std::fmt::Display for LaunchKindChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(launch_kind_label(self.0))
+        f.write_str(&crate::i18n::tr(launch_kind_label(self.0)))
     }
 }
 
@@ -393,13 +394,14 @@ struct ConsoleHostChoice(ConsoleHost);
 
 impl std::fmt::Display for ConsoleHostChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self.0 {
+        let label = match self.0 {
             ConsoleHost::Direct => "直接启动",
             ConsoleHost::Cmd => "命令提示符",
             ConsoleHost::PowerShell => "Windows PowerShell",
             ConsoleHost::PowerShell7 => "PowerShell 7",
             ConsoleHost::WindowsTerminal => "Windows Terminal",
-        })
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 

@@ -1,6 +1,7 @@
 //! Protect draft changes when leaving an application or Profile editor.
 
-use iced::widget::{button, column, container, mouse_area, row, text, Space};
+use iced::widget::{button, column, container, mouse_area, row, Space};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

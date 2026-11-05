@@ -1,6 +1,7 @@
 //! Applications center: search/header and application cards.
 
-use iced::widget::{button, column, container, row, scrollable, text, text_input, tooltip, Column};
+use iced::widget::{button, column, container, row, scrollable, tooltip, Column};
+use crate::i18n::{text, text_input};
 use iced::{Alignment, Border, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

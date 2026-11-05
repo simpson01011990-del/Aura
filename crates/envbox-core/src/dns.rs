@@ -31,10 +31,11 @@ impl DnsTlsRevocation {
 }
 impl std::fmt::Display for DnsTlsRevocation {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.write_str(match self {
+        let label = match self {
             Self::Standard => "标准证书验证",
             Self::StrictOffline => "严格离线吊销验证",
-        })
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 impl std::str::FromStr for DnsTlsRevocation {

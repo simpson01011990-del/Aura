@@ -1,6 +1,7 @@
 //! Three-column shell with custom title bar (no native chrome).
 
-use iced::widget::{button, column, container, mouse_area, pane_grid, row, text, Space};
+use iced::widget::{button, column, container, mouse_area, pane_grid, row, Space};
+use crate::i18n::text;
 use iced::{Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;

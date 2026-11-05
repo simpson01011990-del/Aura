@@ -58,10 +58,11 @@ impl DnsChoice {
 
 impl std::fmt::Display for DnsChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            DnsChoice::Host => write!(f, "宿主"),
-            DnsChoice::VirtualView => write!(f, "虚拟视图"),
-        }
+        let label = match self {
+            DnsChoice::Host => "宿主",
+            DnsChoice::VirtualView => "虚拟视图",
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 
@@ -113,12 +114,13 @@ impl WebRtcChoice {
 
 impl std::fmt::Display for WebRtcChoice {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            WebRtcChoice::Host => write!(f, "宿主"),
-            WebRtcChoice::PublicInterfaceOnly => write!(f, "仅公网"),
-            WebRtcChoice::ProxyOnly => write!(f, "仅代理"),
-            WebRtcChoice::Strict => write!(f, "严格"),
-        }
+        let label = match self {
+            WebRtcChoice::Host => "宿主",
+            WebRtcChoice::PublicInterfaceOnly => "仅公网",
+            WebRtcChoice::ProxyOnly => "仅代理",
+            WebRtcChoice::Strict => "严格",
+        };
+        f.write_str(&crate::i18n::tr(label))
     }
 }
 
@@ -335,6 +337,7 @@ pub enum Message {
     WindowCloseToTray,
     WindowExit,
     WindowClosePreferenceReset,
+    UiLanguageSelected(crate::i18n::Language),
     #[cfg(windows)]
     WindowTrayEvent(crate::tray::TrayEvent),
     WindowRestore,

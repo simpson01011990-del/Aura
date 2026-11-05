@@ -28,6 +28,8 @@ static GEOID GeoIdFromRegion(const wchar_t* region) {
       {L"US", 244}, {L"CN", 45},  {L"GB", 242}, {L"JP", 122},
       {L"DE", 94},  {L"FR", 77},  {L"CA", 39},  {L"AU", 12},
       {L"IN", 113}, {L"SG", 215}, {L"HK", 104}, {L"TW", 227},
+      {L"RU", 203}, {L"NL", 176}, {L"KR", 134}, {L"PH", 201},
+      {L"TR", 235}, {L"BO", 26},
   };
   for (const Entry& e : kTable) {
     if (_wcsicmp(region, e.iso) == 0) {

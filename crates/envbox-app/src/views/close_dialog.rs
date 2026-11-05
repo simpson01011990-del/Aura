@@ -1,6 +1,7 @@
 //! Close confirmation shown by the title-bar X and native close requests.
 
-use iced::widget::{button, checkbox, column, container, mouse_area, row, text, Space};
+use iced::widget::{button, checkbox, column, container, mouse_area, row, Space};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;
@@ -36,7 +37,7 @@ pub fn view(app: &EnvBoxApp) -> Element<'_, Message> {
             .size(TEXT_BODY)
             .color(INK_2)
             .font(font::ui_font()),
-        checkbox("记住我的选择，以后不再询问", app.remember_close_choice)
+        checkbox(crate::i18n::tr("记住我的选择，以后不再询问"), app.remember_close_choice)
             .on_toggle(Message::WindowRememberChoice)
             .size(14)
             .text_size(TEXT_BODY),

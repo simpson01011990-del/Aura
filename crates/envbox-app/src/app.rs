@@ -910,6 +910,14 @@ impl EnvBoxApp {
             }
             Message::WindowCloseToTray => return self.hide_to_tray(),
             Message::WindowExit => return self.request_exit(),
+            Message::UiLanguageSelected(language) => {
+                match crate::i18n::select(self.store.root(), language) {
+                    Ok(()) => self.set_status(StatusKind::Success, "界面语言已切换"),
+                    Err(err) => {
+                        self.set_status(StatusKind::Error, format!("保存界面语言失败：{err}"))
+                    }
+                }
+            }
             Message::WindowClosePreferenceReset => {
                 match close_behavior::save(self.store.root(), CloseBehavior::Ask) {
                     Ok(()) => {

@@ -22,13 +22,41 @@ RequestExecutionLevel admin
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_INSTFILES
 !define MUI_FINISHPAGE_RUN
-!define MUI_FINISHPAGE_RUN_TEXT "启动 Aura"
+!define MUI_FINISHPAGE_RUN_TEXT "$(TXT_RUN_AURA)"
 !define MUI_FINISHPAGE_RUN_FUNCTION LaunchInstalledAura
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
+; Installer language follows the Windows display language (Chinese, English, Russian, Dutch).
 !insertmacro MUI_LANGUAGE "SimpChinese"
 !insertmacro MUI_LANGUAGE "English"
+!insertmacro MUI_LANGUAGE "Russian"
+!insertmacro MUI_LANGUAGE "Dutch"
+
+LangString TXT_RUN_AURA ${LANG_SIMPCHINESE} "启动 Aura"
+LangString TXT_RUN_AURA ${LANG_ENGLISH} "Launch Aura"
+LangString TXT_RUN_AURA ${LANG_RUSSIAN} "Запустить Aura"
+LangString TXT_RUN_AURA ${LANG_DUTCH} "Aura starten"
+LangString TXT_STOP_FAILED ${LANG_SIMPCHINESE} "无法安全关闭此安装目录中的 Aura，或程序文件仍被使用。请关闭 Aura 后重试。尚未修改安装文件。"
+LangString TXT_STOP_FAILED ${LANG_ENGLISH} "Aura in this installation folder could not be closed safely, or its files are still in use. Close Aura and retry. No installed files were changed."
+LangString TXT_STOP_FAILED ${LANG_RUSSIAN} "Не удалось безопасно закрыть Aura в этой папке установки, либо файлы программы ещё используются. Закройте Aura и повторите. Установленные файлы не изменены."
+LangString TXT_STOP_FAILED ${LANG_DUTCH} "Aura in deze installatiemap kon niet veilig worden gesloten, of de bestanden zijn nog in gebruik. Sluit Aura en probeer opnieuw. Er zijn geen geïnstalleerde bestanden gewijzigd."
+LangString TXT_LAUNCH_FAILED ${LANG_SIMPCHINESE} "Aura 已安装，但无法自动启动。请从开始菜单启动 Aura。"
+LangString TXT_LAUNCH_FAILED ${LANG_ENGLISH} "Aura is installed but could not be started automatically. Start Aura from the Start menu."
+LangString TXT_LAUNCH_FAILED ${LANG_RUSSIAN} "Aura установлена, но не запустилась автоматически. Запустите Aura из меню «Пуск»."
+LangString TXT_LAUNCH_FAILED ${LANG_DUTCH} "Aura is geïnstalleerd maar kon niet automatisch starten. Start Aura via het menu Start."
+LangString SEC_MAIN_NAME ${LANG_SIMPCHINESE} "Aura 主程序"
+LangString SEC_MAIN_NAME ${LANG_ENGLISH} "Aura program"
+LangString SEC_MAIN_NAME ${LANG_RUSSIAN} "Программа Aura"
+LangString SEC_MAIN_NAME ${LANG_DUTCH} "Aura-programma"
+LangString SEC_START_NAME ${LANG_SIMPCHINESE} "开始菜单快捷方式"
+LangString SEC_START_NAME ${LANG_ENGLISH} "Start menu shortcuts"
+LangString SEC_START_NAME ${LANG_RUSSIAN} "Ярлыки в меню «Пуск»"
+LangString SEC_START_NAME ${LANG_DUTCH} "Snelkoppelingen in menu Start"
+LangString SEC_DESKTOP_NAME ${LANG_SIMPCHINESE} "桌面快捷方式"
+LangString SEC_DESKTOP_NAME ${LANG_ENGLISH} "Desktop shortcut"
+LangString SEC_DESKTOP_NAME ${LANG_RUSSIAN} "Ярлык на рабочем столе"
+LangString SEC_DESKTOP_NAME ${LANG_DUTCH} "Snelkoppeling op bureaublad"
 
 ; Stop only installation-owned managers, never the applications they launched.
 !macro StopInstalledAuraFunction Prefix
@@ -47,7 +75,7 @@ Function ${Prefix}StopInstalledAura
     ${If} $0 != 0
       DetailPrint "Aura process shutdown failed: $1"
       IfSilent stop_abort
-      MessageBox MB_RETRYCANCEL|MB_ICONSTOP "无法安全关闭此安装目录中的 Aura，或程序文件仍被使用。请关闭 Aura 后重试。尚未修改安装文件。$\r$\n$\r$\n$1" IDRETRY stop_retry
+      MessageBox MB_RETRYCANCEL|MB_ICONSTOP "$(TXT_STOP_FAILED)$\r$\n$\r$\n$1" IDRETRY stop_retry
       stop_abort:
         SetErrorLevel 1
         Quit
@@ -69,7 +97,7 @@ Function LaunchInstalledAura
   Pop $0
   Pop $1
   ${If} $0 != 0
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Aura 已安装，但无法自动启动。请从开始菜单启动 Aura。$\r$\n$\r$\n$1"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "$(TXT_LAUNCH_FAILED)$\r$\n$\r$\n$1"
   ${EndIf}
 FunctionEnd
 
@@ -82,7 +110,7 @@ SectionEnd
 ; 覆盖安装不单独卸载旧版本：InstallDirRegKey 已把默认目录对齐到上一版安装位置，
 ; 下面的主程序 section 直接就地覆盖文件、快捷方式和卸载器。
 ; 用户配置在 %LOCALAPPDATA%\com.aura.envbox，安装器不写入、卸载也不删除。
-Section "Aura 主程序" SEC_MAIN
+Section "$(SEC_MAIN_NAME)" SEC_MAIN
   SectionIn RO
   SetOutPath "$INSTDIR"
   File "..\artifacts\envbox-app.exe"
@@ -107,14 +135,14 @@ Section "Aura 主程序" SEC_MAIN
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Aura" "DisplayIcon" "$INSTDIR\envbox-app.exe"
 SectionEnd
 
-Section "开始菜单快捷方式" SEC_START
+Section "$(SEC_START_NAME)" SEC_START
   CreateDirectory "$SMPROGRAMS\Aura"
   CreateShortCut "$SMPROGRAMS\Aura\Aura.lnk" "$INSTDIR\envbox-app.exe" "" "$INSTDIR\envbox-app.exe" 0 SW_SHOWNORMAL "" "Aura"
   CreateShortCut "$SMPROGRAMS\Aura\EnvBox CLI.lnk" "$INSTDIR\envbox.exe" "" "$INSTDIR\envbox.exe" 0 SW_SHOWNORMAL "" "EnvBox CLI"
   CreateShortCut "$SMPROGRAMS\Aura\Environment Probe.lnk" "$INSTDIR\envbox-probe.exe" "" "$INSTDIR\envbox-probe.exe" 0 SW_SHOWNORMAL "" "Environment Probe"
 SectionEnd
 
-Section "桌面快捷方式" SEC_DESKTOP
+Section "$(SEC_DESKTOP_NAME)" SEC_DESKTOP
   CreateShortCut "$DESKTOP\Aura.lnk" "$INSTDIR\envbox-app.exe" "" "$INSTDIR\envbox-app.exe" 0 SW_SHOWNORMAL "" "Aura"
 SectionEnd
 

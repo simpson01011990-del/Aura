@@ -28,6 +28,10 @@ impl CloseBehavior {
 #[serde(default)]
 struct UiPreferences {
     close_behavior: CloseBehavior,
+    /// Interface language code (`zh-CN`, `en`, `ru`, `nl`); absent = follow Windows.
+    /// Kept before the `pane_ratios` table so plain values serialize first.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    language: Option<String>,
     pane_ratios: PaneRatios,
 }
 
@@ -79,6 +83,16 @@ pub fn load_pane_ratios(root: &Path) -> PaneRatios {
     let mut ratios = load_preferences(root).pane_ratios;
     ratios.normalize();
     ratios
+}
+
+pub fn load_language(root: &Path) -> Option<String> {
+    load_preferences(root).language
+}
+
+pub fn save_language(root: &Path, code: &str) -> Result<(), String> {
+    let mut preferences = load_preferences(root);
+    preferences.language = Some(code.to_string());
+    save_preferences(root, &preferences)
 }
 
 pub fn save(root: &Path, behavior: CloseBehavior) -> Result<(), String> {

@@ -1,6 +1,7 @@
 //! Window preferences, local data, diagnostics and application updates.
 
-use iced::widget::{button, column, container, row, scrollable, text};
+use iced::widget::{button, column, container, pick_list, row, scrollable};
+use crate::i18n::text;
 use iced::{Alignment, Element, Fill, Length, Padding};
 
 use crate::app::EnvBoxApp;
@@ -100,16 +101,35 @@ pub fn view(app: &EnvBoxApp) -> Element<'_, Message> {
     ]
     .spacing(6);
 
+    let language_picker = pick_list(
+        crate::i18n::Language::ALL,
+        Some(crate::i18n::language()),
+        Message::UiLanguageSelected,
+    )
+    .style(theme::pick_style)
+    .menu_style(theme::pick_menu)
+    .text_size(TEXT_BODY)
+    .padding(Padding::from([7, 10]))
+    .font(font::ui_font())
+    .width(Length::Fixed(160.0));
     let general = form_section(
         "常规",
-        setting_row(
-            "关闭主窗口",
-            format!(
-                "当前：{}。适用于关闭按钮和 Alt+F4。",
-                app.close_behavior.label()
+        column![
+            setting_row(
+                "Aura 界面语言",
+                "选择 Aura 窗口使用的语言，立即生效。".into(),
+                language_picker,
             ),
-            action_button("重新选择", Message::WindowClosePreferenceReset),
-        ),
+            setting_row(
+                "关闭主窗口",
+                format!(
+                    "当前：{}。适用于关闭按钮和 Alt+F4。",
+                    app.close_behavior.label()
+                ),
+                action_button("重新选择", Message::WindowClosePreferenceReset),
+            ),
+        ]
+        .spacing(18),
     );
 
     let audit_summary = if app.audit_loading {

@@ -1,19 +1,25 @@
 //! Curated Profile editor option lists (common values only).
-//! Display: Chinese region names / locale tokens / timezone Chinese names.
+//! Display: region names / locale tokens / timezone names. Labels are built in
+//! Chinese (the source language) and translated to the Aura interface language.
 
 /// Common regions supported by the Profile editor.
 pub const COMMON_REGIONS: &[&str] = &[
-    "CN", "US", "TW", "SG", "JP", "PH", "GB", "DE", "KR", "BO", "TR",
+    "CN", "US", "TW", "SG", "JP", "PH", "GB", "DE", "KR", "BO", "TR", "RU", "NL",
 ];
 
 /// Locale and UI language share the same Windows locale tokens.
 pub const COMMON_LOCALES: &[&str] = &[
     "zh-CN", "en-US", "zh-TW", "en-SG", "zh-SG", "ja-JP", "en-PH", "fil-PH", "en-GB", "de-DE",
-    "ko-KR", "es-BO", "tr-TR",
+    "ko-KR", "es-BO", "tr-TR", "ru-RU", "nl-NL",
 ];
 
-/// Shared Chinese region labels; unknown codes remain visible unchanged.
+/// Region labels in the interface language; unknown codes remain visible unchanged.
 pub fn region_label(code: &str) -> String {
+    let label = region_label_zh(code);
+    crate::i18n::tr(&label).into_owned()
+}
+
+fn region_label_zh(code: &str) -> String {
     match code.trim().to_ascii_uppercase().as_str() {
         "CN" => "中国".into(),
         "US" => "美国".into(),
@@ -26,6 +32,8 @@ pub fn region_label(code: &str) -> String {
         "KR" => "韩国".into(),
         "BO" => "玻利维亚".into(),
         "TR" => "土耳其".into(),
+        "RU" => "俄罗斯".into(),
+        "NL" => "荷兰".into(),
         _ => code.to_string(),
     }
 }
@@ -35,13 +43,27 @@ pub fn locale_label(locale: &str) -> String {
     locale.trim().to_string()
 }
 
-/// Windows / IANA timezone → short Chinese name. Never leak raw English ids.
+/// Windows / IANA timezone → short name in the interface language.
+/// Chinese: never leak raw English ids. Other languages: translated label when
+/// one exists, otherwise the readable English id (city or Windows name).
 /// Covers every pair in `envbox_storage::COMMON_TIMEZONE_PAIRS` + host leftovers.
 pub fn timezone_label(tz: &str) -> String {
     let t = tz.trim();
     if t.is_empty() {
         return String::new();
     }
+    let zh = timezone_label_zh(t);
+    if crate::i18n::language() == crate::i18n::Language::Zh {
+        return zh;
+    }
+    match envbox_core::i18n::translate(&zh) {
+        Some(translated) => translated,
+        None if t.contains('/') => t.rsplit('/').next().unwrap_or(t).replace('_', " "),
+        None => t.to_string(),
+    }
+}
+
+fn timezone_label_zh(t: &str) -> String {
     if t.contains('/') || t.eq_ignore_ascii_case("utc") {
         return iana_label(t);
     }
@@ -85,6 +107,19 @@ fn iana_label(t: &str) -> String {
         "Europe/Kyiv" | "Europe/Kiev" => Some("基辅"),
         "Europe/Istanbul" => Some("伊斯坦布尔"),
         "Europe/Moscow" => Some("莫斯科"),
+        "Europe/Amsterdam" => Some("阿姆斯特丹"),
+        "Europe/Kaliningrad" => Some("加里宁格勒"),
+        "Europe/Volgograd" => Some("伏尔加格勒"),
+        "Europe/Samara" => Some("萨马拉"),
+        "Asia/Yekaterinburg" => Some("叶卡捷琳堡"),
+        "Asia/Omsk" => Some("鄂木斯克"),
+        "Asia/Novosibirsk" => Some("新西伯利亚"),
+        "Asia/Krasnoyarsk" => Some("克拉斯诺亚尔斯克"),
+        "Asia/Irkutsk" => Some("伊尔库茨克"),
+        "Asia/Yakutsk" => Some("雅库茨克"),
+        "Asia/Vladivostok" => Some("符拉迪沃斯托克"),
+        "Asia/Magadan" => Some("马加丹"),
+        "Asia/Kamchatka" => Some("堪察加"),
         "Australia/Sydney" => Some("悉尼"),
         "Australia/Perth" => Some("珀斯"),
         "Africa/Johannesburg" => Some("约翰内斯堡"),
@@ -128,7 +163,7 @@ fn windows_tz_label(t: &str) -> String {
         "central america standard time" => "中美洲时间",
         "gmt standard time" => "英国时间",
         "greenwich standard time" => "格林尼治时间",
-        "w. europe standard time" => "西欧（德国）时间",
+        "w. europe standard time" => "西欧（柏林／阿姆斯特丹）时间",
         "romance standard time" => "中欧西岸时间",
         "central europe standard time" => "中欧时间",
         "central european standard time" => "中欧标准时间",
@@ -136,6 +171,19 @@ fn windows_tz_label(t: &str) -> String {
         "gtb standard time" => "东欧标准时间",
         "turkey standard time" => "土耳其时间",
         "russian standard time" => "俄罗斯时间",
+        "kaliningrad standard time" => "加里宁格勒时间",
+        "volgograd standard time" => "伏尔加格勒时间",
+        "astrakhan standard time" => "阿斯特拉罕时间",
+        "saratov standard time" => "萨拉托夫时间",
+        "russia time zone 3" => "萨马拉时间",
+        "ekaterinburg standard time" => "叶卡捷琳堡时间",
+        "omsk standard time" => "鄂木斯克时间",
+        "altai standard time" => "阿尔泰时间",
+        "tomsk standard time" => "托木斯克时间",
+        "transbaikal standard time" => "外贝加尔时间",
+        "magadan standard time" => "马加丹时间",
+        "russia time zone 10" => "中科雷姆斯克时间",
+        "russia time zone 11" => "堪察加时间",
         "israel standard time" => "以色列时间",
         "arabian standard time" => "阿拉伯时间",
         "arab standard time" => "阿拉伯时间",
@@ -299,8 +347,11 @@ pub fn filter_options<'a>(options: &'a [String], query: &str, kind: OptionKind) 
         .map(|s| s.as_str())
         .filter(|s| {
             let label = option_label(kind, s);
-            // Hide leftovers that would still read as English (user: 不要英文).
-            if kind == OptionKind::Timezone && !is_zh_display(&label) {
+            // Chinese UI: hide leftovers that would still read as English (user: 不要英文).
+            if kind == OptionKind::Timezone
+                && crate::i18n::language() == crate::i18n::Language::Zh
+                && !is_zh_display(&label)
+            {
                 return false;
             }
             if q.is_empty() {

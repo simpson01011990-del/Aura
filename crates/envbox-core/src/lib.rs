@@ -12,6 +12,7 @@ pub mod browser_policy;
 pub mod container;
 pub use container::{Container, ContainerMode};
 pub mod dns;
+pub mod i18n;
 pub mod identity;
 pub use identity::IdentityProfile;
 pub mod run_snapshot;
